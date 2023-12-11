@@ -1,3 +1,5 @@
+import { useState } from "react"
+
 const Hello = (props) => {
   console.log(props)
   return (
@@ -31,6 +33,9 @@ const App = () => {
     {name: 'Maya', age: 10} 
   ]
   const friends2 = ['Peter', 'Maya']
+
+  const [counter, setCounter] = useState(0)
+
   return (
     <div>
       <div>
@@ -64,8 +69,23 @@ const App = () => {
         <h2>Friends2</h2>
         <p>{friends2}</p>
       </>
+
+      <>
+        <h1>Counter</h1>
+        <Display counter={counter}/>
+        <Button text='minus' onClick={() => setCounter(counter - 1)}/>
+        <Button text='zero' onClick={() => setCounter(0)}/>
+        <Button text='plus' onClick={() => setCounter(counter + 1)}/>
+      </>
     </div>
   )
 }
+
+const Display = ({counter}) => <p>{counter}</p>
+
+const Button = ({text, onClick}) => {
+  return <button onClick = {onClick}>{text}</button>
+}
+
 
 export default App
