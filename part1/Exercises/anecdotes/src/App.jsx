@@ -13,7 +13,9 @@ const App = () => {
   ]
   
   const [selected, setSelected] = useState(0)
-  let nextSelected = Math.floor(Math.random() * anecdotes.length)
+  const [votes, setVotes] = useState(Array(anecdotes.length).fill(0));
+  const [mostVotedIndex, setMostVotedIndex] = useState(0)
+  //let nextSelected = Math.floor(Math.random() * anecdotes.length)
   /**
    * This line is needed because if the nextSelected is the same selected
    * then setSelected will receive the same value and won't update the component
@@ -21,29 +23,44 @@ const App = () => {
    * the app state remains the same (until the component re-renders after clicking vote)
    * Another solution, generate nextSelected in the button's onClick handler instead
    */
-  nextSelected = nextSelected === selected ? Math.floor(Math.random() * anecdotes.length) : nextSelected;
-  console.log('Next selected ', nextSelected)
-  const [votes, setVotes] = useState(Array(anecdotes.length).fill(0));
+  //nextSelected = nextSelected === selected ? Math.floor(Math.random() * anecdotes.length) : nextSelected;
 
   const handleVote = () => {
     console.log(votes)
-    console.log(selected)
     const newVotes = [...votes]
     newVotes[selected]++
+    const newMostVotedIndex = getMostVotedIndex(newVotes, mostVotedIndex);
     setVotes(newVotes)
+    console.log(newMostVotedIndex)
+    setMostVotedIndex(newMostVotedIndex);
   }
+   const handleClick = () => {
+    console.log('selected ', selected)
+    const nextSelected = Math.floor(Math.random() * anecdotes.length)
+    setSelected(nextSelected)
+   }
 
   return (
     <div>
+      <h2>Anecdote of the day</h2>
       {anecdotes[selected]}<br/>
       has {votes[selected]} votes <br/>
       <button onClick={handleVote}>vote</button>
-      <button onClick={() => {
-        console.log('selected ', selected)
-        setSelected(nextSelected)
-      }}>next anecdotes</button>
+      <button onClick={handleClick}>next anecdotes</button>
+
+      <h2>Anecdote with most votes</h2>
+      {anecdotes[mostVotedIndex]}<br/>
+      has {votes[mostVotedIndex]} votes
     </div>
   )
+}
+
+const getMostVotedIndex = (arr, currentMax) => {
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i] > arr[currentMax])
+      return i;
+  }
+  return currentMax;
 }
 
 export default App
