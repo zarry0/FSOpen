@@ -31,19 +31,21 @@ const Statistics = ({good, neutral, bad}) => {
   if (!showStats) return <>No feedback given</>
 
   return (
-    <>
+    <table>
+      <tbody>
       <StatisticLine text='good' value={good}/>
       <StatisticLine text='neutral' value={neutral}/>
       <StatisticLine text='bad' value={bad}/>
       <StatisticLine text='all' value={total}/>
       <StatisticLine text='average' value={average}/>
       <StatisticLine text='positive' value={`${positivePercent}%`}/>
-    </>
+      </tbody>
+    </table>
   ); 
 }
 
 const StatisticLine = ({text, value}) => {
-  return <>{text} {value} <br/></>
+  return <tr><td>{text}</td><td>{value}</td></tr>;
 }
 
 export default App
