@@ -11,13 +11,37 @@ const App = () => {
     'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when diagnosing patients.',
     'The only way to go fast, is to go well.'
   ]
-   
+  
   const [selected, setSelected] = useState(0)
-  const nextSelected = Math.floor(Math.random() * anecdotes.length)
+  let nextSelected = Math.floor(Math.random() * anecdotes.length)
+  /**
+   * This line is needed because if the nextSelected is the same selected
+   * then setSelected will receive the same value and won't update the component
+   * and since the component didn't update no newSelected value was generated and
+   * the app state remains the same (until the component re-renders after clicking vote)
+   * Another solution, generate nextSelected in the button's onClick handler instead
+   */
+  nextSelected = nextSelected === selected ? Math.floor(Math.random() * anecdotes.length) : nextSelected;
+  console.log('Next selected ', nextSelected)
+  const [votes, setVotes] = useState(Array(anecdotes.length).fill(0));
+
+  const handleVote = () => {
+    console.log(votes)
+    console.log(selected)
+    const newVotes = [...votes]
+    newVotes[selected]++
+    setVotes(newVotes)
+  }
+
   return (
     <div>
       {anecdotes[selected]}<br/>
-      <button onClick={() => setSelected(nextSelected)}>next anecdotes</button>
+      has {votes[selected]} votes <br/>
+      <button onClick={handleVote}>vote</button>
+      <button onClick={() => {
+        console.log('selected ', selected)
+        setSelected(nextSelected)
+      }}>next anecdotes</button>
     </div>
   )
 }
