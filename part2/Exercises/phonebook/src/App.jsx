@@ -12,9 +12,13 @@ const App = () => {
 
   const handleAdd = (e) => {
     e.preventDefault()
-    //console.log(e.target)
-    const nameObj = { name : newName };
-    setPersons([...persons, nameObj])
+    
+    if (persons.find(person => person.name === newName) === undefined) {
+      const nameObj = { name : newName };
+      setPersons([...persons, nameObj])
+    }else {
+      alert(`${newName} is already added to phonebook`)
+    }
     setNewName('')
   }
 
