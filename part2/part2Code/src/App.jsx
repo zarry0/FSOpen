@@ -1,6 +1,7 @@
 /* eslint-disable react/jsx-key */
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Note from './components/Note'
+import axios from 'axios'
 
 const App = (props) => {
 
@@ -8,6 +9,22 @@ const App = (props) => {
   const [newNote, setNewNote] = useState('a new note...');
   const [showAll, setShowAll] = useState(true);
 
+  const [notesEffect, setNotesEffect] = useState([]);
+  const [finishFetch, setFinishFetch] = useState(false);
+  useEffect(() => {
+    console.log('Effect')
+    axios
+      .get('http://localhost:3001/notes')
+      .then(
+        response => {
+        console.log('promise fulfilled')
+        setNotesEffect(response.data)
+        setFinishFetch(true)
+      },
+        () => setFinishFetch(false))
+  }, [])
+  console.log('render', notesEffect.length, 'notes')
+  
   const notesToShow = showAll ? notes : notes.filter(note => note.important)
 
   const addNote = (event) => {
@@ -73,6 +90,19 @@ const App = (props) => {
             {notesToShow.map(note => <Note key={note.id} note={note}/>)}
           </ul>
         </div>
+      </div>
+
+      <div>
+        <h1>[2c]Getting data from server</h1>
+        <h2>Notes (Fetched from json-server)</h2>
+        {finishFetch && 
+          <ul>
+          <li>{notesEffect[0].content}</li>
+          <li>{notesEffect[1].content}</li>
+          <li>{notesEffect[2].content}</li>
+        </ul> 
+        }
+        
       </div>
     </>
   )
