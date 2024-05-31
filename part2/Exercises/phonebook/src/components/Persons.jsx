@@ -5,7 +5,7 @@ export const Persons = ({persons}) => {
 const Person = ({person}) => {
     return (
       <div>
-        <li>{person.name} {person.phone}</li>
+        <li>{person.name} {person.number}</li>
       </div>
     )
 }
