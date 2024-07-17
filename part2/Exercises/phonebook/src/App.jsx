@@ -12,10 +12,11 @@ const App = () => {
   const [newPhone, setNewPhone] = useState('')
   const [filter, setFilter] = useState('')
 
+  const baseURL = 'http://localhost:3001/persons';
   useEffect(() => {
     console.log("Inisde effect hook")
     axios
-      .get('http://localhost:3001/persons')
+      .get(baseURL)
       .then(
         response => {
           console.log(response)
@@ -40,11 +41,19 @@ const App = () => {
     if (persons.find(person => person.name === newName) === undefined) {
       const personObj = { 
         name : newName,
-        phone : newPhone
+        number : newPhone
       };
       const newPersons = [...persons, personObj]
-      setPersons(newPersons)
-      setPersonsFiltered(newPersons)
+      console.log(newPersons)
+      
+      axios
+        .post(baseURL, personObj)
+        .then(response => {
+          console.log(response.data)
+          setPersons(newPersons)
+          setPersonsFiltered(newPersons)
+        })
+
     }else {
       alert(`${newName} is already added to phonebook`)
     }
