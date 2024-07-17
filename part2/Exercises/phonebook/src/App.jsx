@@ -3,6 +3,7 @@ import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import { Persons } from './components/Persons'
 import axios from 'axios'
+import communicationUtils from './services/communicationUtils'
 
 const App = () => {
 
@@ -15,16 +16,13 @@ const App = () => {
   const baseURL = 'http://localhost:3001/persons';
   useEffect(() => {
     console.log("Inisde effect hook")
-    axios
-      .get(baseURL)
-      .then(
-        response => {
-          console.log(response)
-          const personsData = response.data
-          setPersons(personsData)
-          setPersonsFiltered(personsData)
-        },
-        error => console.log("Error ", error))
+
+    communicationUtils.getAll()
+      .then(fetchedPersons => {
+        console.log(fetchedPersons)
+        setPersons(fetchedPersons)
+        setPersonsFiltered(fetchedPersons)
+      })
   }, []);
 
   const handleNameChange = (e) => {
@@ -43,13 +41,11 @@ const App = () => {
         name : newName,
         number : newPhone
       };
-      const newPersons = [...persons, personObj]
-      console.log(newPersons)
-      
-      axios
-        .post(baseURL, personObj)
-        .then(response => {
-          console.log(response.data)
+
+      communicationUtils.post(personObj)
+        .then(addedNumber => {
+          console.log(addedNumber)
+          const newPersons = persons.concat(addedNumber);
           setPersons(newPersons)
           setPersonsFiltered(newPersons)
         })
