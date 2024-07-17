@@ -36,7 +36,8 @@ const App = () => {
   const handleAdd = (e) => {
     e.preventDefault()
     
-    if (persons.find(person => person.name === newName) === undefined) {
+    const foundPerson = persons.find(person => person.name === newName)
+    if (foundPerson === undefined) {
       const personObj = { 
         name : newName,
         number : newPhone
@@ -51,7 +52,16 @@ const App = () => {
         })
 
     }else {
-      alert(`${newName} is already added to phonebook`)
+      const confirmation = window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)
+      if (confirmation){
+        console.log("updating number")
+        communicationUtils.uptate(foundPerson.id, {...foundPerson, number: newPhone})
+        .then(updatedPerson => {
+          console.log(updatedPerson)
+          setPersons(persons.map(person => person.id === updatedPerson.id ? updatedPerson : person))
+          setPersonsFiltered(personsFiltered.map(person => person.id === updatedPerson.id ? updatedPerson : person))
+        })
+      }
     }
     setNewName('')
     setNewPhone('')
