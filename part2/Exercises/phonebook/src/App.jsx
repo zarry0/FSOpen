@@ -91,9 +91,14 @@ const App = () => {
       .then(deletedPerson => {
         console.log(deletedPerson)
         console.log(persons.filter(person => person.id !== id))
-        setPersons(persons.filter(person => person.id !== id))
-        setPersonsFiltered(personsFiltered.filter(person => person.id !== id))
+        
       })
+      .catch((error) => {
+        console.log(error)
+        alert("This person was already removed from server")
+      })
+      setPersons(persons.filter(person => person.id !== id))
+      setPersonsFiltered(personsFiltered.filter(person => person.id !== id))
   }
 
   return (
