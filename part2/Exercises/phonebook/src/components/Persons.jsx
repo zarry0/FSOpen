@@ -1,11 +1,14 @@
-export const Persons = ({persons}) => {
-    return (<ul>{persons.map(person => <Person key={person.name} person={person}/>)}</ul>)
+export const Persons = ({persons, handleDelete}) => {
+    return (<ul>{persons.map(person => <Person key={person.name} person={person} handleDelete={handleDelete}/>)}</ul>)
 }
 
-const Person = ({person}) => {
+const Person = ({person, handleDelete}) => {
     return (
       <div>
-        <li>{person.name} {person.number}</li>
+        <li>
+          {person.name} {person.number} <button onClick={() => handleDelete(person)}>delete</button>
+        </li>
+        
       </div>
     )
 }

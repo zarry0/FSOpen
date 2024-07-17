@@ -69,6 +69,23 @@ const App = () => {
     setFilter(newFilter)
   }
 
+  const handleDelete = ({name, number, id}) => {
+    console.log("number id: " + id)
+    const confirmation = window.confirm(`Delete ${name} ?`)
+    if (!confirmation) {
+      console.log("Aborted deletion")
+      return 
+    }
+    console.log(confirmation)
+    communicationUtils.remove(id)
+      .then(deletedPerson => {
+        console.log(deletedPerson)
+        console.log(persons.filter(person => person.id !== id))
+        setPersons(persons.filter(person => person.id !== id))
+        setPersonsFiltered(personsFiltered.filter(person => person.id !== id))
+      })
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -86,7 +103,7 @@ const App = () => {
         }}
       />
       <h2>Numbers</h2>
-      <Persons persons={personsFiltered}/>
+      <Persons persons={personsFiltered} handleDelete={handleDelete}/>
     </div>
   )
 }

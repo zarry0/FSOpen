@@ -10,4 +10,8 @@ const post = (obj) => {
     return axios.post(baseURL, obj).then(response => response.data);
 }
 
-export default {getAll, post}
+const remove = (id) => {
+    return axios.delete(`${baseURL}/${id}`).then(response => response.data)
+}
+
+export default {getAll, post, remove}
