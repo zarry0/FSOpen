@@ -13,7 +13,7 @@ const App = (props) => {
   const [newNote, setNewNote] = useState('a new note...');
   const [showAll, setShowAll] = useState(true);
 
-  const [notesEffect, setNotesEffect] = useState([]);
+  const [notesEffect, setNotesEffect] = useState(null);
   const [finishFetch, setFinishFetch] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
 
@@ -36,7 +36,9 @@ const App = (props) => {
       },
       () => setFinishFetch(false));
   }, [])
-  console.log('render', notesEffect.length, 'notes')
+  
+  if (finishFetch)
+    console.log('render', notesEffect.length, 'notes')
   
   const notesToShow = showAll ? notes : notes.filter(note => note.important)
   const notesToShow2d = showAll ? notesEffect : notesEffect.filter(note => note.important);
