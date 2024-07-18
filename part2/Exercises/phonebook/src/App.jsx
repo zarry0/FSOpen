@@ -4,6 +4,7 @@ import PersonForm from './components/PersonForm'
 import { Persons } from './components/Persons'
 import axios from 'axios'
 import communicationUtils from './services/communicationUtils'
+import Notification from './components/Notification'
 
 const App = () => {
 
@@ -12,6 +13,8 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newPhone, setNewPhone] = useState('')
   const [filter, setFilter] = useState('')
+  const [message, setMessage] = useState(null);
+  const [isErrorMessage, setIsErrorMessage] = useState(false);
 
   const baseURL = 'http://localhost:3001/persons';
   useEffect(() => {
@@ -48,10 +51,18 @@ const App = () => {
           console.log(addedNumber)
           const newPersons = persons.concat(addedNumber);
           setPersons(newPersons)
-          setPersonsFiltered(newPersons)
-        })
+          const filteredNewPerson = newName.toLowerCase().includes(filter.toLowerCase()) ? newPersons : personsFiltered
+          setPersonsFiltered(filteredNewPerson)
+      })
+
+      setMessage(`Added ${newName}`)
+      setIsErrorMessage(false)
+      setTimeout(() => {
+        setMessage(null)
+      }, 3000)
 
     }else {
+      
       const confirmation = window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)
       if (confirmation){
         console.log("updating number")
@@ -60,11 +71,27 @@ const App = () => {
           console.log(updatedPerson)
           setPersons(persons.map(person => person.id === updatedPerson.id ? updatedPerson : person))
           setPersonsFiltered(personsFiltered.map(person => person.id === updatedPerson.id ? updatedPerson : person))
+          
+          setMessage(`Updated ${newName}`)
+          setIsErrorMessage(false)
+          setTimeout(() => {
+            setMessage(null)
+          }, 3000)
+        })
+        .catch(error => {
+          console.log(error)
+          setIsErrorMessage(true)
+          setMessage(`Information ${newName} has already been deleted from server`)
+          setTimeout(() => {
+            setMessage(null)
+            setIsErrorMessage(false)
+          }, 3000)
         })
       }
     }
     setNewName('')
     setNewPhone('')
+    
   }
 
   const handleFilter = (e) => {
@@ -104,6 +131,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={message} isErrorMsg={isErrorMessage}/>
       <Filter value={filter} handler={handleFilter}/>
 
       <h2>add a new</h2>
