@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react'
 import Note from './components/Note'
 import ImportantNote from './components/ImportantNote.jsx'
 import noteService from './services/notes.js'
+import Notification from './components/Notification.jsx'
+import Footer from './components/Footer.jsx'
 import axios from 'axios'
 
 const App = (props) => {
@@ -13,6 +15,7 @@ const App = (props) => {
 
   const [notesEffect, setNotesEffect] = useState([]);
   const [finishFetch, setFinishFetch] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
 
   useEffect(() => {
     console.log('Effect')
@@ -101,7 +104,10 @@ const App = (props) => {
         setNotesEffect(notesEffect.map(n => n.id !== id ? n : toggledNote));
       })
       .catch(error => {
-        alert(`the note "${note.content}" was already deleted from server`);
+        // alert(`the note "${note.content}" was already deleted from server`);
+        const errorMsg = `the note "${note.content}" was already deleted from server`;
+        setErrorMessage(errorMsg);
+        setTimeout(() => setErrorMessage(null), 5000);
         setNotesEffect(notesEffect.filter(n => n.id !== id))        
       })
   };
@@ -168,6 +174,7 @@ const App = (props) => {
       <div> {/* 2d */}
         <h1>[2d] Altering data in server</h1>
         <h2>Notes (fetched from json server)</h2>
+        <Notification message={errorMessage}/>
         {finishFetch &&
           <>
             <button onClick={() => setShowAll(!showAll)}>show {showAll ? "important" : "all"}</button>
@@ -181,6 +188,8 @@ const App = (props) => {
           </>
         }
       </div>
+
+      <Footer />
     </>
   )
 }
