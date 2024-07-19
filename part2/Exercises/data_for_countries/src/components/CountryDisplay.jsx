@@ -1,37 +1,52 @@
+import { useState } from "react";
 
 // DisplayInfo is:
 //   - [string]
-// ASSUME: the list wont be empty
+
 
 const CountryDisplay = ({displayInfo}) => {
 
     const infoSize = displayInfo.length;
-    let valueToDisplay;
 
-    if (infoSize === 0) 
-        valueToDisplay = ['No match found, specify another filter'];
-    else if (infoSize > 1 && infoSize <= 10) 
-        valueToDisplay = displayInfo.map(country => `${country.name.common}`);
-    else if (infoSize > 10) 
-        valueToDisplay = ['Too many matches, specify another filter'];
-    
-    if (infoSize === 1)
-        return <CountryInfo value={displayInfo}/>;
-    return <CountryList value={valueToDisplay} />;
+    if (infoSize <= 0) 
+        return 'No match found, specify another filter';
+    else if (infoSize === 1)
+        return <CountryInfo value={displayInfo} />;
+    else if (infoSize > 1 && infoSize <= 10)
+        return <CountryList values={displayInfo} />;
+    else  
+        return 'Too many matches, specify another filter';
 };
 
-const CountryList = ({value}) => {
+const CountryList = ({values}) => {
+    console.log(values);
+    const [selectedCountry, setSelectedCountry] = useState(null);
+
     const style = {
         padding: 0,
         listStyleType: 'none',
         marginTop: 0
     }
 
+    const handleShow = (i) => {
+        console.log(values[i]);
+        setSelectedCountry(values[i]);
+    }
+    const countryNames = values.map(country => `${country.name.common}`);
     return (
         <div>
             <ul style={style}>
-                {value.map((item, i) => <li key={i}>{item}</li>)}
+                {countryNames.map((item, i) => {
+                    return (
+                        <li key={i}>
+                            {item}
+                            <button onClick={() => handleShow(i)}>show</button>
+                        </li> 
+                    );
+                })}
+                { selectedCountry && <CountryInfo value={[selectedCountry]} />}
             </ul>
+
         </div>
     );
 }
