@@ -1,8 +1,8 @@
 import { useState } from "react";
+import WeatherData from "./WeatherData";
 
 // DisplayInfo is:
 //   - [string]
-
 
 const CountryDisplay = ({displayInfo}) => {
 
@@ -56,7 +56,7 @@ const CountryInfo = ({value}) => {
     return (
         <div>
             <h1>{country.name.common}</h1>
-            capital {country.capital[0]} <br />
+            capital {country.capital} <br />
             area {country.area}
 
             <h3>languages: </h3>
@@ -67,6 +67,11 @@ const CountryInfo = ({value}) => {
             </ul>
             <br />
             <img src={country.flags.png} alt={`flag of ${country.name.common}`} />
+            { 
+                country.capital ? 
+                <WeatherData city={country.capital} lat={country.capitalInfo.latlng[0]} lon={country.capitalInfo.latlng[1]}/> :
+                <h2>No capital city found for {country.name.common} </h2>
+            }
         </div>
     );
     

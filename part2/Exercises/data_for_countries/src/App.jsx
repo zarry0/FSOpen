@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react' 
 import SearchBox from './components/SearchBox';
 import CountryDisplay from './components/CountryDisplay';
-import axios from 'axios'
+import utils from './services/utils.js'
 
 function App() {
   const [query, setQuery] = useState('');
@@ -10,12 +10,11 @@ function App() {
 
   useEffect(() => {
     const baseURL = 'https://studies.cs.helsinki.fi/restcountries/api/all';
-    axios
-      .get(baseURL)
-      .then(response => {
-        console.log(response.data)
-        setCountries(response.data)
-      })
+    utils.get(baseURL)
+      .then(countrylist => {
+        console.log(countrylist);
+        setCountries(countrylist);
+      });
   }, []);
 
   const handleChange = (e) => {
@@ -41,7 +40,5 @@ function App() {
     </>
   );
 }
-
-
 
 export default App;
