@@ -50,7 +50,6 @@ function App() {
 
   const toggleImportanceOf = (id) => {
     console.log('importance of ' + id + ' needs to be toggled');
-    const url = `http://localhost:3001/notes/${id}`;
     const note = notesEffect.find(n => n.id === id);
     const updatedNote = {...note, important : !note.important};
 
@@ -60,6 +59,7 @@ function App() {
       })
       .catch(error => {
         // alert(`the note "${note.content}" was already deleted from server`);
+        console.log(error);
         const errorMsg = `the note "${note.content}" was already deleted from server`;
         setErrorMessage(errorMsg);
         setTimeout(() => setErrorMessage(null), 5000);
