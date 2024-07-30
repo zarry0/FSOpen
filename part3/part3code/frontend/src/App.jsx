@@ -52,9 +52,11 @@ function App() {
     console.log('importance of ' + id + ' needs to be toggled');
     const note = notesEffect.find(n => n.id === id);
     const updatedNote = {...note, important : !note.important};
+    console.log(updatedNote);
 
     noteService.update(id, updatedNote)
       .then(toggledNote => {
+        console.log('note was toggled');
         setNotesEffect(notesEffect.map(n => n.id !== id ? n : toggledNote));
       })
       .catch(error => {
